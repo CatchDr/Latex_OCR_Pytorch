@@ -157,7 +157,7 @@ def train(train_loader, encoder, decoder, criterion, encoder_optimizer,decoder_o
 
     # Batches
     # for i, (imgs, caps, caplens) in tqdm(enumerate(train_loader)):
-    for i, (imgs, caps, caplens) in tqdm(enumerate(train_loader)):
+    for i, (imgs, caps, caplens) in enumerate(train_loader):
         # Move to GPU, if available
         imgs = imgs.to(device)
         caps = caps.to(device)
