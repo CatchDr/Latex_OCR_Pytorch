@@ -1,6 +1,8 @@
 import time
 from config import *
 import torch.backends.cudnn as cudnn
+import warnings
+# warnings.warning(_msg)
 import torch.optim
 import torch.utils.data
 from torch import nn
@@ -10,16 +12,16 @@ from model.utils import *
 from model import metrics,dataloader,model
 from torch.utils.checkpoint import checkpoint as train_ck
 
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = "cpu"
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = "cpu"
 
-
+# torch.autograd.set_detect_anomaly(True)
 model.device = device
 '''
 如果网络的输入数据维度或类型上变化不大，设置  torch.backends.cudnn.benchmark = true  可以增加运行效率；
 如果网络的输入数据在每次 iteration 都变化的话，会导致 cnDNN 每次都会去寻找一遍最优配置，这样反而会降低运行效率。
 '''
-cudnn.benchmark = True
+# cudnn.benchmark = True
 
 
 def main():
@@ -119,7 +121,7 @@ def main():
             is_best = recent_score > best_score
             best_score = max(recent_score, best_score)
             if not is_best:
-                epochs_since_improvement += 1
+                epochs_since_improvement =epochs_since_improvement + 1
                 print("\nEpochs since last improvement: %d\n" % (epochs_since_improvement,))
             else:
                 print('New Best Score!(%d)'%(best_score,))
@@ -189,7 +191,7 @@ def train(train_loader, encoder, decoder, criterion, encoder_optimizer,decoder_o
         loss = criterion(scores, targets)
 
         # 加入 doubly stochastic attention 正则化
-        loss += alpha_c * ((1. - alphas.sum(dim=1)) ** 2).mean()
+        loss =loss+ alpha_c * ((1. - alphas.sum(dim=1)) ** 2).mean()
 
         # 反向传播
         encoder_optimizer.zero_grad()
@@ -284,7 +286,7 @@ def validate(val_loader, encoder, decoder, criterion):
             loss = criterion(scores, targets)
 
             # Add doubly stochastic attention regularization
-            loss += alpha_c * ((1. - alphas.sum(dim=1)) ** 2).mean()
+            loss =loss + alpha_c * ((1. - alphas.sum(dim=1)) ** 2).mean()
 
             # Keep track of metrics
             losses.update(loss.item(), sum(decode_lengths))

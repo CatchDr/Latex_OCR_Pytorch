@@ -55,7 +55,7 @@ def label_transform(text,start_type = '<start>',end_type = '<end>',pad_type = '<
     text = text.split()
     text = [start_type] + text + [end_type]
     # while len(text)<max_len:
-    #     text += [pad_type]
+    #     text =text + [pad_type]
     text = [i for i in map(lambda x:vocab[x],text)]
     return text
     # return torch.LongTensor(text)
@@ -127,12 +127,12 @@ class formuladataset(object):
                     caption = self.label_transform(caption)
                 img_batch.append(img.unsqueeze(dim = 0))
                 cap_batch.append(caption)
-                idx += 1
+                idx = idx +1
                 if idx%self.batch_size == 0:
                     if len(img_batch)==0:
                         break
                     for ii in range(len(cap_batch)):
-                        cap_batch[ii] += [vocab['<pad>']]*(int(max(cap_len_batch))-len(cap_batch[ii]))
+                        cap_batch[ii] =cap_batch[ii] + [vocab['<pad>']]*(int(max(cap_len_batch))-len(cap_batch[ii]))
                     cap_batch = torch.LongTensor(cap_batch)
                     yield torch.cat(img_batch,dim = 0),cap_batch,cap_len_batch
                     img_batch,cap_batch,cap_len_batch = [],[],torch.zeros(self.batch_size).int()
@@ -140,7 +140,7 @@ class formuladataset(object):
             if len(img_batch)==0:
                 continue
             for ii in range(len(cap_batch)):
-                cap_batch[ii] += [vocab['<pad>']]*(int(max(cap_len_batch))-len(cap_batch[ii]))
+                cap_batch[ii] =cap_batch[ii] + [vocab['<pad>']]*(int(max(cap_len_batch))-len(cap_batch[ii]))
             cap_batch = torch.LongTensor(cap_batch)
             yield torch.cat(img_batch,dim = 0),cap_batch,cap_len_batch[:idx]
                 
@@ -150,5 +150,5 @@ class formuladataset(object):
     def __len__(self): # 总数据的多少
         count = 0
         for i in self.bucket_data:
-            count += np.ceil(len(i)/self.batch_size)
+            count =count + np.ceil(len(i)/self.batch_size)
         return int(count)

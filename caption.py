@@ -137,7 +137,7 @@ def caption_image_beam_search(encoder, decoder, image_path, word_map, beam_size=
             print('step',step)
             if step > 160:
                 break
-            step += 1
+            step = step +1
 
         complete_seqs_scores = np.array(complete_seqs_scores)
         i = np.argmax(complete_seqs_scores)

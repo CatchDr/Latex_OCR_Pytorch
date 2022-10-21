@@ -18,8 +18,8 @@ def cal_word_freq(vocab,formuladataset):
     for i in formuladataset.data.values():
         words = i['caption'].split()
         for j in words:
-            word_count[vocab[j]] += 1
-            count += 1
+            word_count[vocab[j]] =word_count[vocab[j]] + 1
+            count =count + 1
     for i in word_count.keys():
         word_count[i] = word_count[i]/count
     return word_count
@@ -170,8 +170,8 @@ class AverageMeter(object):
 
     def update(self, val, n=1):
         self.val = val
-        self.sum += val * n
-        self.count += n
+        self.sum =self.sum + val * n
+        self.count =self.count + n
         self.avg = self.sum / self.count
 
 

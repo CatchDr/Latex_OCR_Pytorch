@@ -1,8 +1,8 @@
 #数据路径
-data_name = 'CROHME'  # 模型名称,仅在保存的时候用到
-vocab_path = './data/CROHME/vocab.json'
-train_set_path = './data/CROHME/train.json'
-val_set_path = './data/CROHME/val.json'
+data_name = 'small'  # 模型名称,仅在保存的时候用到
+vocab_path = './data/'+data_name+'/vocab.json'
+train_set_path = './data/'+data_name+'/train.json'
+val_set_path = './data/'+data_name+'/val.json'
 
 
 # 模型参数

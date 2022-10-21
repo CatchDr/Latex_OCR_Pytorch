@@ -7,7 +7,7 @@ def evaluate(losses, top5accs, references, hypotheses):
     # Calculate scores
     bleu4 = 0.0
     for i,j in zip(references,hypotheses):
-        bleu4 += max(sentence_bleu([i],j),0.01)
+        bleu4 =bleu4+ max(sentence_bleu([i],j),0.01)
     bleu4 = bleu4/len(references)
     Exact_Match = exact_match_score(references, hypotheses)
     Edit_Distance = edit_distance(references, hypotheses)
@@ -38,7 +38,7 @@ def exact_match_score(references, hypotheses):
     exact_match = 0
     for ref, hypo in zip(references, hypotheses):
         if np.array_equal(ref, hypo):
-            exact_match += 1
+            exact_match =exact_match + 1
 
     return exact_match / float(max(len(hypotheses), 1))
 
@@ -55,7 +55,7 @@ def edit_distance(references, hypotheses):
     """
     d_leven, len_tot = 0, 0
     for ref, hypo in zip(references, hypotheses):
-        d_leven += distance.levenshtein(ref, hypo)
-        len_tot += float(max(len(ref), len(hypo)))
+        d_leven =d_leven + distance.levenshtein(ref, hypo)
+        len_tot = len_tot +float(max(len(ref), len(hypo)))
 
     return 1. - d_leven / len_tot
